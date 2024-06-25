@@ -8,10 +8,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.websockets import WebSocket, WebSocketDisconnect
 
+from . import __version__
 from .chat import Chat
 from .database import DataBase
 from .exceptions import UserNotExists
-from .models import ConnectResponse, LoginResponse, TransmissionData
+from .models import ConnectResponse, LoginResponse, TransmissionData, VersionResponse
 
 app = FastAPI(title="Enigma Procotol Server")
 app.add_middleware(
@@ -57,6 +58,11 @@ def connect(identity: str) -> ConnectResponse:
     if public_key:
         return ConnectResponse(user=identity, publicKey=public_key)
     raise HTTPException(status_code=404, detail="User not found")
+
+
+@app.get("/version")
+def version() -> VersionResponse:
+    return VersionResponse(version=__version__)
 
 
 @app.websocket("/connect/{identity}")

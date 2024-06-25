@@ -14,3 +14,6 @@ class TransmissionData(BaseModel):
     from_: str = Field(..., alias="from")
     to: str
     payload: str
+
+class VersionResponse(BaseModel):
+    version: str
