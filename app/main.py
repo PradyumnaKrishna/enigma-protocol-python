@@ -105,12 +105,12 @@ async def websocket_endpoint(websocket: WebSocket, identity: str):
             if user in chats:
                 chat = chats[user]
                 if chat.is_alive():
-                    await chat.send_message(data.model_dump())
+                    await chat.send_message(data.model_dump(by_alias=True))
                 else:
-                    chat.messages.append(data.model_dump())
+                    chat.messages.append(data.model_dump(by_alias=True))
             else:
                 chats[user] = Chat(user=user, connection=None)
-                chats[user].messages.append(data.model_dump())
+                chats[user].messages.append(data.model_dump(by_alias=True))
 
     except WebSocketDisconnect:
         # Cloase the connection from chat.
